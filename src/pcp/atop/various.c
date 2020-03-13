@@ -5,7 +5,7 @@
 ** the system on system-level as well as process-level.
 **
 ** This source-file contains various functions to a.o. format the
-** time-of-day, the cpu-time consumption and the memory-occupation. 
+** time-of-day, the cpu-time consumption and the memory-occupation.
 **
 ** Copyright (C) 2000-2010 Gerlof Langeveld
 ** Copyright (C) 2015-2019 Red Hat.
@@ -149,7 +149,7 @@ hhmm2secs(char *itim, unsigned int *otim)
 
 
 /*
-** Function val2valstr() converts a positive value to an ascii-string of a 
+** Function val2valstr() converts a positive value to an ascii-string of a
 ** fixed number of positions; if the value does not fit, it will be formatted
 ** to exponent-notation (as short as possible, so not via the standard printf-
 ** formatters %f or %e). The offered string should have a length of width+1.
@@ -233,21 +233,21 @@ val2elapstr(int value, char *strvalue, size_t buflen)
         char	*p=strvalue;
 	int	bytes, offset=0;
 
-        if (value >= DAYSECS) 
+        if (value >= DAYSECS)
         {
 		bytes = pmsprintf(p, buflen-offset, "%dd", value/DAYSECS);
 		p += bytes;
 		offset += bytes;
         }
 
-        if (value >= HOURSECS) 
+        if (value >= HOURSECS)
         {
 		bytes = pmsprintf(p, buflen-offset, "%dh", (value%DAYSECS)/HOURSECS);
 		p += bytes;
 		offset += bytes;
         }
 
-        if (value >= MINSECS) 
+        if (value >= MINSECS)
         {
                 bytes = pmsprintf(p, buflen-offset, "%dm", (value%HOURSECS)/MINSECS);
 		p += bytes;
@@ -284,7 +284,7 @@ val2cpustr(count_t value, char *strvalue, size_t buflen)
        	 	*/
         	value = (value + 500) / 1000;
 
-        	if (value < MAXSEC) 
+        	if (value < MAXSEC)
         	{
                	 	pmsprintf(strvalue, buflen, "%2lldm%02llds", value/60, value%60);
 		}
@@ -295,7 +295,7 @@ val2cpustr(count_t value, char *strvalue, size_t buflen)
 			*/
 			value = (value + 30) / 60;
 
-			if (value < MAXMIN) 
+			if (value < MAXMIN)
 			{
 				pmsprintf(strvalue, buflen, "%2lldh%02lldm",
 							value/60, value%60);
@@ -317,7 +317,7 @@ val2cpustr(count_t value, char *strvalue, size_t buflen)
 }
 
 /*
-** Function val2Hzstr() converts a value (in MHz) 
+** Function val2Hzstr() converts a value (in MHz)
 ** to an ascii-string.
 ** The result-string is placed in the area pointed to strvalue,
 ** which should be able to contain 7 positions plus null byte.
@@ -338,7 +338,7 @@ val2Hzstr(count_t value, char *strvalue, size_t buflen)
 
                 if (fval >= 1000.0)            // prepare for the future
                 {
-                        prefix='T';        
+                        prefix='T';
                         fval /= 1000.0;
                 }
 
@@ -408,7 +408,7 @@ val2memstr(count_t value, char *strvalue, size_t buflen, int pformat, int avgval
 		basewidth -= 2;
 		suffix     = "/s";
 	}
-	
+
 	/*
 	** determine which format will be used on bases of the value itself
 	*/
@@ -449,7 +449,7 @@ val2memstr(count_t value, char *strvalue, size_t buflen, int pformat, int avgval
 
 	   case	MBFORMAT:
 		pmsprintf(strvalue, buflen, "%*.1lfM%s",
-			basewidth-1, (double)((double)value/ONEMBYTE), suffix); 
+			basewidth-1, (double)((double)value/ONEMBYTE), suffix);
 		break;
 
 	   case	GBFORMAT:
@@ -476,7 +476,7 @@ val2memstr(count_t value, char *strvalue, size_t buflen, int pformat, int avgval
 
 
 /*
-** Function numeric() checks if the ascii-string contains 
+** Function numeric() checks if the ascii-string contains
 ** a numeric (positive) value.
 ** Returns 1 (true) if so, or 0 (false).
 */
@@ -571,7 +571,16 @@ setalarm2(int sec, int usec)
 	interval.tv_usec = usec;
 	setalarm(&interval);
 }
+void setup_interval(long detla){
+	int sts = 0;
+	fetchstep = detla;
+	if ((sts = pmSetMode(PM_MODE_INTERP, &curtime, fetchstep)) < 0)
+	{
+		pmprintf(
+	"%s: pmSetMode failure: %s\n", pmGetProgname(), pmErrStr(sts));
 
+	}
+}
 static void
 setup_step_mode(pmOptions *opts, int forward)
 {
@@ -1349,4 +1358,3 @@ show_pcp_usage(pmOptions *opts)
 				lop->long_opt, lop->argname, lop->message);
 	}
 }
-

@@ -1,9 +1,9 @@
 /*
-** ATOP - System & Process Monitor 
+** ATOP - System & Process Monitor
 **
 ** The program 'atop' offers the possibility to view the activity of
 ** the system on system-level as well as process-level.
-** 
+**
 ** This source-file contains the print-functions to visualize the calculated
 ** figures.
 **
@@ -79,11 +79,11 @@ static void	generic_init(void);
 
 
 static int	(*procsort[])(const void *, const void *) = {
-			[MSORTCPU&0x1f]=compcpu, 
-			[MSORTMEM&0x1f]=compmem, 
-			[MSORTDSK&0x1f]=compdsk, 
-			[MSORTNET&0x1f]=compnet, 
-			[MSORTGPU&0x1f]=compgpu, 
+			[MSORTCPU&0x1f]=compcpu,
+			[MSORTMEM&0x1f]=compmem,
+			[MSORTDSK&0x1f]=compdsk,
+			[MSORTNET&0x1f]=compnet,
+			[MSORTGPU&0x1f]=compgpu,
 };
 
 extern proc_printpair ownprocs[];
@@ -127,7 +127,7 @@ generic_samp(double curtime, double nsecs,
 	** per accumulated (per user or per program) group of processes
 	**
 	** Xcumlist contains the pointers to all structs in tXcumlist
-	** 
+	**
 	** these lists will only be allocated 'lazy'
 	** only when accumulation is requested
 	*/
@@ -182,7 +182,7 @@ generic_samp(double curtime, double nsecs,
 	startoffset = 0;
 
 	/*
-	** compute the total capacity of this system for the 
+	** compute the total capacity of this system for the
 	** four main resources
 	*/
 	totalcap(&syscap, sstat, devtstat->procactive, devtstat->nprocactive);
@@ -261,11 +261,11 @@ generic_samp(double curtime, double nsecs,
                 int lenavail 	= (screen ? COLS : linelen) -
 						49 - seclen - nodenamelen;
                 int len1	= lenavail / 3;
-                int len2	= lenavail - len1 - len1; 
+                int len2	= lenavail - len1 - len1;
 
 		printg("ATOP - %s%*s%s  %s%*s%c%c%c%c%c%c%c%c%c%c%c%c%c%c%*s%s"
-		       " elapsed", 
-			sysname.nodename, len1, "", 
+		       " elapsed",
+			sysname.nodename, len1, "",
 			format1, format2, len1, "",
 			threadview                    ? MTHREAD    : '-',
 			fixedhead  		      ? MSYSFIXED  : '-',
@@ -297,7 +297,7 @@ generic_samp(double curtime, double nsecs,
 
 		if (noverflow)
 		{
-			pmsprintf(statbuf, sizeof statbuf, 
+			pmsprintf(statbuf, sizeof statbuf,
 			         "Only %d exited processes handled "
 			         "-- %u skipped!", nexit, noverflow);
 
@@ -336,7 +336,7 @@ generic_samp(double curtime, double nsecs,
 			move(curline, 0);
 
 			limitedlines();
-			
+
 			curline = prisyst(sstat, curline, nsecs, avgval,
 					fixedhead,  &syssel, &autoorder,
 					maxcpulines, maxdsklines, maxmddlines,
@@ -499,7 +499,7 @@ generic_samp(double curtime, double nsecs,
 			        "Malloc failed for %d pcum ptrs\n",  nproc);
 
 			for (i=0; i < nproc; i++)
-			{	
+			{
 				/* fill pointers */
 				pcumlist[i] = tpcumlist+i;
 			}
@@ -604,7 +604,7 @@ generic_samp(double curtime, double nsecs,
 				    suppressexit                   )
 					continue;
 
-				sellist[nsel++] = curlist[i]; 
+				sellist[nsel++] = curlist[i];
 			}
 
 			curlist    = sellist;
@@ -615,7 +615,7 @@ generic_samp(double curtime, double nsecs,
 		}
 
 		/*
-		** sort the list in required order 
+		** sort the list in required order
 		** (default CPU-consumption) and print the list
 		*/
 		if (showorder == MSORTAUTO)
@@ -701,7 +701,7 @@ generic_samp(double curtime, double nsecs,
 					    for (t = pcur - tall + 1;
 					         t < devtstat->ntaskall &&
 						 pcur->gen.tgid		&&
-					         pcur->gen.tgid == 
+					         pcur->gen.tgid ==
 					            (tall+t)->gen.tgid;
 					         t++)
 					    {
@@ -798,7 +798,7 @@ generic_samp(double curtime, double nsecs,
 				if (tsklist)   free(tsklist);
 				if (sellist)   free(sellist);
 
-				return lastchar;	
+				return lastchar;
 
 			   /*
 			   ** stop it
@@ -1228,10 +1228,12 @@ generic_samp(double curtime, double nsecs,
 				/* but, need different sampling vs reporting intervals */
 				if (rawreadflag)
 				{
-					statmsg = "Not yet possible when viewing "
-					          "raw file!";
-					beep();
-					break;
+          long delta = getnumval("New interval in seconds "
+  						     "(now %d): ",
+  						     delta, statline);
+          setup_interval(delta);
+
+				 	break;
 				}
 
 				setalarm2(0, 0);	/* stop the clock */
@@ -1765,7 +1767,7 @@ generic_samp(double curtime, double nsecs,
 				break;
 
 			   /*
-			   ** per-process PSS calculation wanted 
+			   ** per-process PSS calculation wanted
 			   */
 			   case MCALCPSS:
 				if (calcpss)
@@ -1892,7 +1894,7 @@ generic_samp(double curtime, double nsecs,
 				break;
 
 			   /*
-			   ** reset statistics 
+			   ** reset statistics
 			   */
 			   case MRESET:
 				getalarm(0);	/* restart the clock */
@@ -1949,7 +1951,7 @@ generic_samp(double curtime, double nsecs,
 			   /*
 			   ** handle arrow up to go one line up
 			   */
-			   case KEY_UP:	
+			   case KEY_UP:
 				if (firstproc > 0)
 					firstproc -= 1;
 				break;
@@ -1979,7 +1981,7 @@ generic_samp(double curtime, double nsecs,
 			   ** handle screen resize
 			   */
 			   case KEY_RESIZE:
-				pmsprintf(statbuf, sizeof statbuf, 
+				pmsprintf(statbuf, sizeof statbuf,
 					"Window resized to %dx%d...",
 			         		COLS, LINES);
 				statmsg = statbuf;
@@ -2036,7 +2038,7 @@ cumusers(struct tstat **curprocs, struct tstat *curusers, int numprocs)
 
 		if ((*curprocs)->gen.state == 'E' && suppressexit)
 			continue;
- 
+
 		if ( curusers->gen.ruid != (*curprocs)->gen.ruid )
 		{
 			if (curusers->gen.pid)
@@ -2124,7 +2126,7 @@ cumconts(struct tstat **curprocs, struct tstat *curconts, int numprocs)
 
 		if ((*curprocs)->gen.state == 'E' && suppressexit)
 			continue;
- 
+
 		if ( strcmp(curconts->gen.container,
                          (*curprocs)->gen.container) != 0)
 		{
@@ -2360,7 +2362,7 @@ limitedlines(void)
 }
 
 /*
-** get a numerical value from the user and verify 
+** get a numerical value from the user and verify
 */
 static long
 getnumval(char *ask, long valuenow, int statline)
@@ -2766,7 +2768,7 @@ showhelp(int helpline)
 	scrollok(helpwin, 1);
 
 	/*
-	** show help-lines 
+	** show help-lines
 	*/
 	for (i=0, shown=0; i < helplines; i++, shown++)
 	{
@@ -2779,7 +2781,7 @@ showhelp(int helpline)
 		{
 			wmove    (helpwin, winlines-1, 0);
 			wclrtoeol(helpwin);
-			wprintw  (helpwin, "Press 'q' to leave help, " 
+			wprintw  (helpwin, "Press 'q' to leave help, "
 					"space for next page or "
 					"other key for next line... ");
 
